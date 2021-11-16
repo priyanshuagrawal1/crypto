@@ -8,6 +8,4 @@ class CryptoPriceHistoryModel extends CryptoPriceHistory {
           name: name,
           priceHistory: priceHistory,
         );
-  // CryptoPriceHistoryModel.fromJson(Map json) =>
-  //     CryptoPriceHistoryModel(priceHistory: json['priceUsd'], name: json['name']);
 }

@@ -11,7 +11,7 @@ class GetCryptoHistoryByName extends CryptoEvent {
 
   GetCryptoHistoryByName({
     required this.name,
-    this.interval = 'd1',
+    this.interval = 'm1',
   });
 }
 
@@ -25,11 +25,22 @@ class ChangeInterval extends CryptoEvent {
   });
 }
 
+class GetCryptoInfoEvent extends CryptoEvent {
+  final String id;
+
+  GetCryptoInfoEvent(this.id);
+}
+
 class GetExchangeRates extends CryptoEvent {}
 
 class ChangeRate extends CryptoEvent {
   final Map<String, dynamic> rates;
   final String currency;
 
-  ChangeRate(this.rates, this.currency);
+  ChangeRate({
+    required this.rates,
+    this.currency = 'USD',
+  });
 }
+
+class GetTopCryptos extends CryptoEvent {}

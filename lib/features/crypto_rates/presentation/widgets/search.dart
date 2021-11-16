@@ -52,6 +52,8 @@ class CryptoSearch extends SearchDelegate {
             onTap: () {
               BlocProvider.of<CryptoBloc>(context).add(GetCryptoHistoryByName(
                   name: searchItems[index].id, interval: interval));
+              BlocProvider.of<CryptoBloc>(context)
+                  .add(GetCryptoInfoEvent(searchItems[index].id));
               close(context, null);
             });
       },

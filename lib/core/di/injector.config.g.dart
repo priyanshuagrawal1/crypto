@@ -18,8 +18,12 @@ class _$InjectorConfig extends InjectorConfig {
   @override
   void _configureBloc() {
     final KiwiContainer container = KiwiContainer();
-    container.registerFactory((c) => CryptoBloc(c<GetAllCryptos>(),
-        c<GetHistoryOfCrypto>(), c<GetExchangeRatesUseCase>()));
+    container
+      ..registerFactory((c) => CryptoBloc(
+          c<GetAllCryptos>(),
+          c<GetHistoryOfCrypto>(),
+          c<GetExchangeRatesUseCase>(),
+          c<GetCryptoInfo>()));
   }
 
   @override
@@ -35,6 +39,7 @@ class _$InjectorConfig extends InjectorConfig {
   void _configureUseCases() {
     final KiwiContainer container = KiwiContainer();
     container
+      ..registerSingleton((c) => GetCryptoInfo(c<CryptoRepositiory>()))
       ..registerSingleton(
           (c) => GetExchangeRatesUseCase(c<CryptoRepositiory>()))
       ..registerSingleton((c) => GetHistoryOfCrypto(c<CryptoRepositiory>()))

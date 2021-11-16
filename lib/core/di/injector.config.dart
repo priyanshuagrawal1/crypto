@@ -2,6 +2,7 @@ import 'package:crypto_book/features/crypto_rates/data/data_sources/crypto_remot
 import 'package:crypto_book/features/crypto_rates/data/repositiories/crypto_repository_impl.dart';
 import 'package:crypto_book/features/crypto_rates/domain/repositiories/crypto_repositiory.dart';
 import 'package:crypto_book/features/crypto_rates/domain/use_cases/get_all_cryptos.dart';
+import 'package:crypto_book/features/crypto_rates/domain/use_cases/get_crypto_info.dart';
 import 'package:crypto_book/features/crypto_rates/domain/use_cases/get_exchange_rates.dart';
 import 'package:crypto_book/features/crypto_rates/domain/use_cases/get_history_of_crypto.dart';
 import 'package:crypto_book/features/crypto_rates/presentation/bloc/bloc/crypto_bloc.dart';
@@ -35,6 +36,7 @@ abstract class InjectorConfig {
   @Register.factory(CryptoRepositoryImpl)
   void _configureRepo();
 
+  @Register.singleton(GetCryptoInfo)
   @Register.singleton(GetExchangeRatesUseCase)
   @Register.singleton(GetHistoryOfCrypto)
   @Register.singleton(GetAllCryptos)

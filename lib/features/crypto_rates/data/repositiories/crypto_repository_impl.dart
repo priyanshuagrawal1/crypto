@@ -22,4 +22,9 @@ class CryptoRepositoryImpl extends CryptoRepositiory {
   Future<Map<String, dynamic>> getExchangeRates() {
     return _cryptoRemoteData.getExchangeRates();
   }
+
+  @override
+  Future<CryptoModel> getCryptoInfo(String id) {
+    return _cryptoRemoteData.getCryptoInfo(id);
+  }
 }

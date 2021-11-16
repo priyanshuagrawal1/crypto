@@ -1,5 +1,7 @@
 import 'package:crypto_book/core/di/injector.config.dart';
 import 'package:crypto_book/core/di/injector.dart';
+import 'package:crypto_book/features/crypto_rates/presentation/pages/top_gainers.dart';
+import 'package:crypto_book/features/crypto_rates/presentation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,6 +26,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const LineChartPage(),
+        routes: {
+          topGainersRoute: (ctx) => const TopGainers(),
+          lineChartRoute: (ctx) => const LineChartPage()
+        },
       ),
     );
   }
