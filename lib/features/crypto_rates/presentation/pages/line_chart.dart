@@ -19,35 +19,36 @@ class LineChartPage extends StatefulWidget {
   State<LineChartPage> createState() => _LineChartPageState();
 }
 
-class _LineChartPageState extends State<LineChartPage> {
-  Future<Map> getdata({String crypto = 'bitcoin'}) async {
-    Uri uri = Uri.parse(
-        'http://api.coincap.io/v2/assets/squid-coin/history?interval=m15');
-    final data = await http.get(uri, headers: {
-      'Authorization': 'Bearer 7c8f5438-b7be-4186-a6ed-470d33ff9fb8'
-    });
-    Map jsonData = jsonDecode(data.body);
-    return jsonData;
-  }
-
-  Future<void> get() async {
-    Uri url = Uri.parse('localhost:3000/api/addnewtask');
-    final data = await http.post(url);
-  }
-
+class _LineChartPageState extends State<LineChartPage>
+    with SingleTickerProviderStateMixin {
   late TooltipBehavior _tooltipBehavior;
-
+  late TrackballBehavior _trackballBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
+  late CrosshairBehavior _crosshairBehavior;
 
   @override
   void initState() {
     _tooltipBehavior = TooltipBehavior(enable: true);
+    _crosshairBehavior = CrosshairBehavior(
+        lineColor: Colors.red,
+        lineDashArray: <double>[5, 5],
+        lineWidth: 2,
+        lineType: CrosshairLineType.vertical,
+        activationMode: ActivationMode.singleTap,
+        enable: true);
+    _trackballBehavior = TrackballBehavior(
+        tooltipAlignment: ChartAlignment.near,
+        tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        enable: true,
+        tooltipSettings:
+            const InteractiveTooltip(enable: true, color: Colors.red));
     _zoomPanBehavior = ZoomPanBehavior(
       enablePinching: true,
       enablePanning: true,
       enableDoubleTapZooming: true,
       enableMouseWheelZooming: true,
     );
+
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       BlocProvider.of<CryptoBloc>(context).add(GetExchangeRates());
@@ -77,15 +78,13 @@ class _LineChartPageState extends State<LineChartPage> {
     return '00';
   }
 
+  String cryptoName = '';
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> cryptos = [];
     List<Crypto> cryptoList = [];
-    String cryptoName = '';
     Crypto? crypto;
     double changeAmt = 0;
-
-    getdata();
     return DefaultTabController(
       length: 5,
       child: Scaffold(
@@ -169,12 +168,11 @@ class _LineChartPageState extends State<LineChartPage> {
             )
           ],
           bottom: TabBar(
+            isScrollable: false,
             onTap: (i) {
               List names = ['m1', 'm15', 'h1', 'h6', 'h12'];
               BlocProvider.of<CryptoBloc>(context).add(
                   GetCryptoHistoryByName(interval: names[i], name: cryptoName));
-              BlocProvider.of<CryptoBloc>(context)
-                  .add(GetCryptoInfoEvent(cryptoName));
             },
             tabs: const [
               Tab(child: Text('1D', style: TextStyle(color: Colors.black))),
@@ -237,10 +235,16 @@ class _LineChartPageState extends State<LineChartPage> {
                             style: Theme.of(context).textTheme.headline3,
                           ),
                           SfCartesianChart(
+                            crosshairBehavior: _crosshairBehavior,
+                            trackballBehavior: _trackballBehavior,
                             tooltipBehavior: _tooltipBehavior,
                             zoomPanBehavior: _zoomPanBehavior,
                             primaryXAxis: DateTimeAxis(),
-                            primaryYAxis: NumericAxis(opposedPosition: true),
+                            primaryYAxis: NumericAxis(
+                              opposedPosition: true,
+                              interactiveTooltip:
+                                  const InteractiveTooltip(enable: true),
+                            ),
                             series: <
                                 ChartSeries<Map<String, dynamic>, DateTime>>[
                               LineSeries(
@@ -266,7 +270,7 @@ class _LineChartPageState extends State<LineChartPage> {
                               DataColumn(
                                 label: Text(
                                   toBeginningOfSentenceCase(cryptoName)!,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -332,6 +336,34 @@ class _LineChartPageState extends State<LineChartPage> {
                   );
                 },
               )
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text(
+                'Buy',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.green, minimumSize: const Size(100, 50)),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text(
+                'Sell',
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.red, minimumSize: Size(100, 50)),
+            ),
           ],
         ),
       ),
@@ -414,7 +446,12 @@ class _LineChartPageState extends State<LineChartPage> {
                 (crypto) => DataRow(
                   cells: [
                     DataCell(
-                      SizedBox(width: 120, child: Text(crypto.name)),
+                      SizedBox(
+                          width: 120,
+                          child: Text(
+                            crypto.name,
+                            style: TextStyle(fontSize: 16),
+                          )),
                     ),
                     DataCell(
                       Text(crypto.price.toStringAsFixed(5)),
