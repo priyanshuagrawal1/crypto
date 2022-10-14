@@ -26,7 +26,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    Map data = {};
 
     return Scaffold(
       appBar: AppBar(

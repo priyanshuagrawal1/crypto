@@ -46,16 +46,20 @@ class CryptoSearch extends SearchDelegate {
       itemCount: searchItems.length,
       itemBuilder: (ctx, index) {
         return ListTile(
-            title: Text(searchItems[index].name),
-            subtitle: Text(searchItems[index].price.toString()),
-            leading: Text(searchItems[index].symbol),
-            onTap: () {
-              BlocProvider.of<CryptoBloc>(context).add(GetCryptoHistoryByName(
-                  name: searchItems[index].id, interval: interval));
-              BlocProvider.of<CryptoBloc>(context)
-                  .add(GetCryptoInfoEvent(searchItems[index].id));
-              close(context, null);
-            });
+          title: Text(searchItems[index].name),
+          subtitle: Text(searchItems[index].price.toString()),
+          leading: Text(searchItems[index].symbol),
+          onTap: () {
+            BlocProvider.of<CryptoBloc>(context).add(
+              GetCryptoHistoryByName(
+                  name: searchItems[index].id, interval: interval),
+            );
+            BlocProvider.of<CryptoBloc>(context).add(
+              GetCryptoInfoEvent(searchItems[index].id),
+            );
+            close(context, null);
+          },
+        );
       },
     );
   }

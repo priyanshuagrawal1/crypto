@@ -1,17 +1,13 @@
-import 'dart:convert';
-
 import 'package:crypto_book/features/crypto_rates/presentation/routes.dart';
 import 'package:crypto_book/features/crypto_rates/presentation/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../domain/entities/crypto.dart';
 import '../bloc/bloc/crypto_bloc.dart';
 import '../widgets/search.dart';
 
-// ignore: must_be_immutable
 class LineChartPage extends StatefulWidget {
   const LineChartPage({Key? key}) : super(key: key);
 
@@ -120,6 +116,7 @@ class _LineChartPageState extends State<LineChartPage>
                 return SizedBox(
                   width: 200,
                   child: DropdownButtonFormField(
+                    value: currency,
                     menuMaxHeight: 400,
                     onChanged: (dynamic str) =>
                         BlocProvider.of<CryptoBloc>(context).add(
@@ -362,7 +359,7 @@ class _LineChartPageState extends State<LineChartPage>
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                  primary: Colors.red, minimumSize: Size(100, 50)),
+                  primary: Colors.red, minimumSize: const Size(100, 50)),
             ),
           ],
         ),
@@ -372,7 +369,7 @@ class _LineChartPageState extends State<LineChartPage>
 
   Text biggerBolderText(String text) => Text(
         text,
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       );
 
   Column topAndLasts({
@@ -450,7 +447,7 @@ class _LineChartPageState extends State<LineChartPage>
                           width: 120,
                           child: Text(
                             crypto.name,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           )),
                     ),
                     DataCell(

@@ -19,7 +19,7 @@ class _$InjectorConfig extends InjectorConfig {
   void _configureBloc() {
     final KiwiContainer container = KiwiContainer();
     container
-      ..registerFactory((c) => CryptoBloc(
+      .registerFactory((c) => CryptoBloc(
           c<GetAllCryptos>(),
           c<GetHistoryOfCrypto>(),
           c<GetExchangeRatesUseCase>(),
